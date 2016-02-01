@@ -10,6 +10,9 @@ class App
             require_once HBGEVENTIMPORTER_PATH . 'source/php/Helper/AcfImportCleaner.php';
         }
 
+        register_activation_hook(plugin_basename(__FILE__), '\HbgEventImporter\App::addCronJob');
+        register_deactivation_hook(plugin_basename(__FILE__), '\HbgEventImporter\App::removeCronJob');
+
         add_filter('acf/settings/load_json', array($this, 'acfJsonLoadPath'));
 
         add_action('admin_enqueue_scripts', array($this, 'enqueueStyles'));
@@ -17,6 +20,9 @@ class App
 
         add_action('init', array($this, 'registerPostType'));
         add_action('admin_menu', array($this, 'createParsePage'));
+
+        // Register cron action
+        add_action('import_events_daily', array($this, 'startImport'));
 
         new Admin\Options();
     }
@@ -27,7 +33,6 @@ class App
      */
     public function enqueueStyles()
     {
-
     }
 
     /**
@@ -36,7 +41,6 @@ class App
      */
     public function enqueueScripts()
     {
-
     }
 
     public function registerPostType()
@@ -79,26 +83,27 @@ class App
     }
 
     /**
-     * Creates a admin page to trigger update data function
+     * Starts the data import
      * @return void
      */
-    public function createParsePage()
+    public function startImport()
     {
-        add_submenu_page(
-            'edit.php?post_type=events',
-            'Uppdatera data',
-            'Uppdatera data',
-            'edit_posts',
-            'eventsGetNew',
-            function () {
-                new \HbgEventImporter\Parser\Xcap('http://mittkulturkort.se/calendar/listEvents.action?month=&date=&categoryPermaLink=&q=&p=&feedType=ICAL_XML');
-            }
-        );
+        new \HbgEventImporter\Parser\Xcap('http://mittkulturkort.se/calendar/listEvents.action?month=&date=&categoryPermaLink=&q=&p=&feedType=ICAL_XML');
     }
 
     public function acfJsonLoadPath($paths)
     {
         $paths[] = HBGEVENTIMPORTER_PATH . '/acf-exports';
         return $paths;
+    }
+
+    public static function addCronJob()
+    {
+        wp_schedule_event(time(), 'daily', 'import_events_daily');
+    }
+
+    public static function removeCronJob()
+    {
+        wp_clear_scheduled_hook('import_events_daily');
     }
 }
