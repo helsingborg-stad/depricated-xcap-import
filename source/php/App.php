@@ -79,7 +79,30 @@ class App
             'supports'             => array('title', 'revisions', 'editor')
         );
 
-        register_post_type('events', $args);
+        register_post_type('event', $args);
+
+        // Daily cron
+        if (!wp_next_scheduled('import_events_daily')) {
+            wp_schedule_event(time(), 'daily', 'import_events_daily');
+        }
+    }
+
+    /**
+     * Creates a admin page to trigger update data function
+     * @return void
+     */
+    public function createParsePage()
+    {
+        add_submenu_page(
+            'edit.php?post_type=events',
+            'Uppdatera data',
+            'Uppdatera data',
+            'edit_posts',
+            'eventsGetNew',
+            function () {
+                new \HbgEventImporter\Parser\Xcap('http://mittkulturkort.se/calendar/listEvents.action?month=&date=&categoryPermaLink=&q=&p=&feedType=ICAL_XML');
+            }
+        );
     }
 
     /**
