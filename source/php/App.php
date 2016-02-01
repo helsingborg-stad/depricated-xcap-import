@@ -91,7 +91,7 @@ class App
             'edit_posts',
             'eventsGetNew',
             function () {
-                new Parser\Xcap('http://mittkulturkort.se/calendar/listEvents.action?month=&date=&categoryPermaLink=kulturkortet%2Fdunkers&feedType=ICAL_XML');
+                new \HbgEventImporter\Parser\Xcap('http://mittkulturkort.se/calendar/listEvents.action?month=&date=&categoryPermaLink=&q=&p=&feedType=ICAL_XML');
             }
         );
     }
