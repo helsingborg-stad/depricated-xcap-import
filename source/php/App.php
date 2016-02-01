@@ -6,6 +6,12 @@ class App
 {
     public function __construct()
     {
+        if (!file_exists(WP_CONTENT_DIR . '/mu-plugins/AcfImportCleaner.php')) {
+            require_once HBGEVENTIMPORTER_PATH . 'source/php/Helper/AcfImportCleaner.php';
+        }
+
+        add_filter('acf/settings/load_json', array($this, 'acfJsonLoadPath'));
+
         add_action('admin_enqueue_scripts', array($this, 'enqueueStyles'));
         add_action('admin_enqueue_scripts', array($this, 'enqueueScripts'));
 
@@ -88,5 +94,11 @@ class App
                 new Parser\Xcap('http://mittkulturkort.se/calendar/listEvents.action?month=&date=&categoryPermaLink=kulturkortet%2Fdunkers&feedType=ICAL_XML');
             }
         );
+    }
+
+    public function acfJsonLoadPath($paths)
+    {
+        $paths[] = HBGEVENTIMPORTER_PATH . '/acf-exports';
+        return $paths;
     }
 }

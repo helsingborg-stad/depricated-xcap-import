@@ -43,8 +43,8 @@ class Xcap extends \HbgEventImporter\Parser
 
             \HbgEventImporter\Event::add(array(
                 'id'          => $event->uid,
-                'date_start'  => strtotime($date_start),
-                'date_end'    => strtotime($date_end),
+                'date_start'  => $this->formatDate($date_start),
+                'date_end'    => $this->formatDate($date_end),
                 'title'       => $event->summary,
                 'description' => $description,
                 'categories'  => $categories,
@@ -77,5 +77,22 @@ class Xcap extends \HbgEventImporter\Parser
         }
 
         return $passes;
+    }
+
+    public function formatDate($date)
+    {
+        // Format the date string corretly
+        $dateParts = explode("T", $date);
+        $dateString = substr($dateParts[0], 0, 4) . '-' . substr($dateParts[0], 4, 2) . '-' . substr($dateParts[0], 6, 2);
+        $timeString = substr($dateParts[1], 0, 4);
+        $timeString = substr($timeString, 0, 2) . ':' . substr($timeString, 2, 2);
+        $dateString = $dateString . ' ' . $timeString;
+
+        // Create UTC date object
+        $date = new \DateTime(date('Y-m-d H:i', strtotime($dateString)));
+        $timeZone = new \DateTimeZone('Europe/Stockholm');
+        $date->setTimezone($timeZone);
+
+        return $date->format('Y-m-d H:i:s');
     }
 }
