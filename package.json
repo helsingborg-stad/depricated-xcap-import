@@ -8,14 +8,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/Svanmark/Wordpress-Plugin-Boilerplate.git"
+    "url": "https://github.com/helsingborg-stad/xcap-import.git"
   },
   "author": "Kristoffer Svanmark, Sebastian Thulin",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/Svanmark/Wordpress-Plugin-Boilerplate/issues"
+    "url": "https://github.com/helsingborg-stad/xcap-import/issues"
   },
-  "homepage": "https://github.com/Svanmark/Wordpress-Plugin-Boilerplate",
+  "homepage": "https://github.com/helsingborg-stad/xcap-import",
   "devDependencies": {
     "gulp": "^3.8.11",
     "gulp-autoprefixer": "^3.1.0",
