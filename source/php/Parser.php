@@ -1,6 +1,6 @@
 <?php
 
-namespace KulturkortetImport;
+namespace HbgEventImporter;
 
 class Parser
 {

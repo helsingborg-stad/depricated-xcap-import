@@ -1,6 +1,6 @@
 <?php
 
-namespace KulturkortetImport\Helper;
+namespace HbgEventImporter\Helper;
 
 class Arr
 {

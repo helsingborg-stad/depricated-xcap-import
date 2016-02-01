@@ -12,7 +12,7 @@ var plumber = require('gulp-plumber');
 
 // Compile Our Sass
 gulp.task('sass-dist', function() {
-    gulp.src('source/sass/kulturkortet-import.scss')
+    gulp.src('source/sass/hbg-event-importer.scss')
             .pipe(plumber())
             .pipe(sass())
             .pipe(autoprefixer('last 2 version', 'safari 5', 'ie 8', 'ie 9', 'opera 12.1'))
@@ -22,7 +22,7 @@ gulp.task('sass-dist', function() {
 });
 
 gulp.task('sass-dev', function() {
-    gulp.src('source/sass/kulturkortet-import.scss')
+    gulp.src('source/sass/hbg-event-importer.scss')
         .pipe(plumber())
         .pipe(sass())
         .pipe(autoprefixer('last 2 version', 'safari 5', 'ie 8', 'ie 9', 'opera 12.1'))
@@ -35,9 +35,9 @@ gulp.task('scripts-dist', function() {
     gulp.src([
             'source/js/**/*.js',
         ])
-        .pipe(concat('kulturkortet-import.dev.js'))
+        .pipe(concat('hbg-event-importer.dev.js'))
         .pipe(gulp.dest('dist/js'))
-        .pipe(rename('kulturkortet-import.min.js'))
+        .pipe(rename('hbg-event-importer.min.js'))
         .pipe(uglify())
         .pipe(gulp.dest('dist/js'));
 });

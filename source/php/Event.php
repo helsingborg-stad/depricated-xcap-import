@@ -1,6 +1,6 @@
 <?php
 
-namespace KulturkortetImport;
+namespace HbgEventImporter;
 
 class Event
 {
@@ -55,7 +55,7 @@ class Event
      */
     public static function add($data = array())
     {
-        $requiredKeysExists = \KulturkortetImport\Helper\Arr::arrayKeysExist(
+        $requiredKeysExists = \HbgEventImporter\Helper\Arr::arrayKeysExist(
             $data,
             'id',
             'date_start',
@@ -72,6 +72,7 @@ class Event
             return false;
         }
 
+        // Check if event uid already exists
         $postId = Event::get(1, array(
             array(
                 'key' => 'event-uid',
@@ -81,8 +82,7 @@ class Event
         ), true);
         $postId = isset($postId->ID) ? $postId->ID : null;
 
-        var_dump($postId);
-
+        // Update or create event
         if ($postId !== null) {
             wp_update_post(array(
                 'ID'           => $postId,
@@ -100,8 +100,6 @@ class Event
         }
 
         self::addPostMeta($postId, $data);
-
-        exit;
     }
 
     /**
@@ -113,5 +111,10 @@ class Event
     private static function addPostMeta($postId, $data)
     {
         update_post_meta($postId, 'event-uid', $data['id']);
+        update_post_meta($postId, 'event-date-start', $data['date_start']);
+        update_post_meta($postId, 'event-date-end', $data['date_end']);
+        update_post_meta($postId, 'event-location', $data['location']);
+        update_post_meta($postId, 'event-address', $data['address']);
+        update_post_meta($postId, 'event-image_url', $data['image_url']);
     }
 }

@@ -1,8 +1,8 @@
 <?php
 
-namespace KulturkortetImport\Parser;
+namespace HbgEventImporter\Parser;
 
-class Xcap extends \KulturkortetImport\Parser
+class Xcap extends \HbgEventImporter\Parser
 {
     private $url;
 
@@ -19,7 +19,7 @@ class Xcap extends \KulturkortetImport\Parser
         $events = $xml->iCal->vevent;
 
         foreach ($events as $event) {
-            \KulturkortetImport\Event::add(array(
+            \HbgEventImporter\Event::add(array(
                 'id'          => $event->uid,
                 'date_start'  => strtotime($event->dtstart),
                 'date_end'    => strtotime($event->dtend),

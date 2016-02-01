@@ -1,6 +1,6 @@
 <?php
 
-namespace KulturkortetImport\Vendor;
+namespace HbgEventImporter\Vendor;
 
 /**
  * A PSR-4 compatible class loader.
