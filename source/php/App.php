@@ -11,6 +11,8 @@ class App
 
         add_action('init', array($this, 'registerPostType'));
         add_action('admin_menu', array($this, 'createParsePage'));
+
+        new Admin\Options();
     }
 
     /**
