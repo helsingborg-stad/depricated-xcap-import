@@ -21,7 +21,7 @@
             {
                 "key": "field_56b06bfae69e2",
                 "label": "Post status",
-                "name": "post_status",
+                "name": "xcap_post_status",
                 "type": "radio",
                 "instructions": "Status p\u00e5 nyimporterade evenemang.",
                 "required": 1,

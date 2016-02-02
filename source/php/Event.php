@@ -97,7 +97,7 @@ class Event
             $postId = wp_insert_post(array(
                 'post_title'   => $data['title'],
                 'post_content' => $data['description'],
-                'post_status'  => 'draft',
+                'post_status'  => get_field('xcap_post_status', 'option') ? get_field('xcap_post_status', 'option') : 'publish',
                 'post_type'    => 'event'
             ));
         }
