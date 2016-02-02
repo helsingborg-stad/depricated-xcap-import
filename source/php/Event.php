@@ -33,10 +33,12 @@ class Event
             'show_in_nav_menus'    => true,
             'has_archive'          => true,
             'rewrite'              => array(
-                'slug' => 'poi',
+                'slug'       => 'event',
                 'with_front' => false
             ),
+            'hierarchical'         => false,
             'exclude_from_search'  => false,
+            'taxonomies' => array('event-types'),
             'supports'             => array('title', 'revisions', 'editor')
         );
 
@@ -63,6 +65,53 @@ class Event
         add_filter('manage_edit-event_columns', '\HbgEventImporter\Event::defineListColumns'); // Columns
         add_filter('manage_edit-event_sortable_columns', '\HbgEventImporter\Event::sortListColumns'); // Sorting
         add_action('manage_event_posts_custom_column', '\HbgEventImporter\Event::listColumnContent', 10, 2); // Column content
+
+        self::registerTaxonomy();
+    }
+
+    /**
+     * Create a taxonomy
+     *
+     * @uses  Inserts new taxonomy object into the list
+     * @uses  Adds query vars
+     *
+     * @param string  Name of taxonomy object
+     * @param array|string  Name of the object type for the taxonomy object.
+     * @param array|string  Taxonomy arguments
+     * @return null|WP_Error WP_Error if errors, otherwise null.
+     */
+    public static function registerTaxonomy()
+    {
+        $labels = array(
+            'name'                  => _x('Event categories', 'Taxonomy plural name', 'hbg-event-importer'),
+            'singular_name'         => _x('Event category', 'Taxonomy singular name', 'hbg-event-importer'),
+            'search_items'          => __('Search Event Categories', 'hbg-event-importer'),
+            'popular_items'         => __('Popular Event Categories', 'hbg-event-importer'),
+            'all_items'             => __('All Event Categories', 'hbg-event-importer'),
+            'parent_item'           => __('Parent Event Category', 'hbg-event-importer'),
+            'parent_item_colon'     => __('Parent Event Category', 'hbg-event-importer'),
+            'edit_item'             => __('Edit Event Category', 'hbg-event-importer'),
+            'update_item'           => __('Update Event Category', 'hbg-event-importer'),
+            'add_new_item'          => __('Add New Event Category', 'hbg-event-importer'),
+            'new_item_name'         => __('New Event Category', 'hbg-event-importer'),
+            'add_or_remove_items'   => __('Add or remove Event Categories', 'hbg-event-importer'),
+            'choose_from_most_used' => __('Choose from most used Event Categories', 'hbg-event-importer'),
+            'menu_name'             => __('Event Category', 'hbg-event-importer'),
+        );
+
+        $args = array(
+            'labels'                => $labels,
+            'public'                => true,
+            'show_in_nav_menus'     => true,
+            'show_admin_column'     => false,
+            'hierarchical'          => false,
+            'show_tagcloud'         => true,
+            'show_ui'               => true,
+            'query_var'             => true,
+            'rewrite'               => true
+        );
+
+        register_taxonomy('event-types', array('event'), $args);
     }
 
     /**
@@ -210,6 +259,8 @@ class Event
                 'post_type'    => 'event'
             ));
         }
+
+        wp_set_object_terms($postId, $data['categories'], 'event-types', true);
 
         self::addPostMeta($postId, $data);
     }
