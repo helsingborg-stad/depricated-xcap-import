@@ -260,6 +260,7 @@ class Event
             ));
         }
 
+        $data['categories'] = array_map('ucwords', $data['categories']);
         wp_set_object_terms($postId, $data['categories'], 'event-types', true);
 
         self::addPostMeta($postId, $data);
