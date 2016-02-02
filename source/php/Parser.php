@@ -2,10 +2,18 @@
 
 namespace HbgEventImporter;
 
-class Parser
+abstract class Parser
 {
-    public function __construct()
-    {
+    protected $url;
 
+    public function __construct($url)
+    {
+        $this->url = $url;
+        $this->start();
     }
+
+    /**
+     * Used to start the parsing
+     */
+    abstract public function start();
 }

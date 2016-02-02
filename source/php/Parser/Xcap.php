@@ -4,12 +4,9 @@ namespace HbgEventImporter\Parser;
 
 class Xcap extends \HbgEventImporter\Parser
 {
-    private $url;
-
     public function __construct($url)
     {
-        $this->url = $url;
-        $this->start();
+        parent::__construct($url);
     }
 
     public function start()
