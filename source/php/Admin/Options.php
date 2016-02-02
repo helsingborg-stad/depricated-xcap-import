@@ -9,8 +9,8 @@ class Options
         if (function_exists('acf_add_options_sub_page')) {
             acf_add_options_sub_page(array(
                 'page_title'    => 'Hbg Event Importer Options',
-                'menu_title'    => 'Options',
-                'parent_slug'   => 'edit.php?post_type=events'
+                'menu_title'    => __('Options'),
+                'parent_slug'   => 'edit.php?post_type=event'
             ));
         }
     }
