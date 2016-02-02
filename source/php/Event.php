@@ -14,7 +14,7 @@ class Event
     {
         $args = array(
             'posts_per_page' => $count,
-            'post_type'      => 'events',
+            'post_type'      => 'event',
             'post_status'    => 'publish',
             'orderby'        => 'date',
             'order'          => 'DESC'
@@ -84,18 +84,21 @@ class Event
 
         // Update or create event
         if ($postId !== null) {
+            if (get_field('event-sync', $postId) !== true) {
+                return;
+            }
+
             wp_update_post(array(
                 'ID'           => $postId,
                 'post_title'   => $data['title'],
-                'post_content' => $data['description'],
-                'post_type'    => 'events'
+                'post_content' => $data['description']
             ));
         } else {
             $postId = wp_insert_post(array(
                 'post_title'   => $data['title'],
                 'post_content' => $data['description'],
                 'post_status'  => 'draft',
-                'post_type'    => 'events'
+                'post_type'    => 'event'
             ));
         }
 
@@ -110,6 +113,7 @@ class Event
      */
     private static function addPostMeta($postId, $data)
     {
+        update_post_meta($postId, 'event-sync', true);
         update_post_meta($postId, 'event-uid', $data['id']);
         update_post_meta($postId, 'event-date-start', $data['date_start']);
         update_post_meta($postId, 'event-date-end', $data['date_end']);
