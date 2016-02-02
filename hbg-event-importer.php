@@ -9,7 +9,7 @@
  * Author URI:        http://www.helsingborg.se
  * License:           MIT
  * License URI:       https://opensource.org/licenses/MIT
- * Text Domain:       kulturkortet-import
+ * Text Domain:       hbg-event-importer
  * Domain Path:       /languages
  */
 
@@ -22,7 +22,7 @@ define('HBGEVENTIMPORTER_PATH', plugin_dir_path(__FILE__));
 define('HBGEVENTIMPORTER_URL', plugins_url('', __FILE__));
 define('HBGEVENTIMPORTER_TEMPLATE_PATH', HBGEVENTIMPORTER_PATH . 'templates/');
 
-load_plugin_textdomain('kulturkortet-import', false, plugin_basename(dirname(__FILE__)) . '/languages');
+load_plugin_textdomain('hbg-event-importer', false, plugin_basename(dirname(__FILE__)) . '/languages');
 
 require_once HBGEVENTIMPORTER_PATH . 'source/php/Vendor/Psr4ClassLoader.php';
 require_once HBGEVENTIMPORTER_PATH . 'Public.php';
