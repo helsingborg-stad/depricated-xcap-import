@@ -3,9 +3,48 @@
         "title": "Xcap (Mittkulturkort.se)",
         "fields": [
             {
+                "key": "field_56b055179e151",
+                "label": "Daglig inl\u00e4sning",
+                "name": "xcap_daily_cron",
+                "type": "true_false",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "message": "Aktivera daglig automatisk inl\u00e4sning fr\u00e5n Xcap",
+                "default_value": 1
+            },
+            {
+                "key": "field_56b06bfae69e2",
+                "label": "Post status",
+                "name": "post_status",
+                "type": "radio",
+                "instructions": "Status p\u00e5 nyimporterade evenemang.",
+                "required": 1,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "choices": {
+                    "draft": "Utkast",
+                    "pending": "V\u00e4ntar p\u00e5 granskning",
+                    "publish": "Publicerad"
+                },
+                "other_choice": 0,
+                "save_other_choice": 0,
+                "default_value": "publish",
+                "layout": "vertical"
+            },
+            {
                 "key": "field_56af508abf6de",
                 "label": "Filtrera p\u00e5 kategori\/taggar",
-                "name": "filter_categories",
+                "name": "xcap_filter_categories",
                 "type": "text",
                 "instructions": "Skriv in namn p\u00e5 de kategorier\/taggar som du vill importera. Separera med kommatecken",
                 "required": 0,

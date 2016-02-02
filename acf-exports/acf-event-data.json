@@ -3,6 +3,22 @@
         "title": "Evenemangsdata",
         "fields": [
             {
+                "key": "field_56b0561e416cf",
+                "label": "",
+                "name": "sync",
+                "type": "true_false",
+                "instructions": "Om du avaktiverar denna funktion kommer uppdateringar som g\u00f6rs via xcap eller cbis inte att h\u00e4mtas in per automatik f\u00f6r detta evenemang. Detta m\u00f6jligg\u00f6r att du kan \u00e4ndra i text och information utan att den blir \u00f6verskriven av information fr\u00e5n xcap eller cbis.",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "message": "Synkronisera informationen med api",
+                "default_value": 1
+            },
+            {
                 "key": "field_56af56cceafb8",
                 "label": "Startdatum",
                 "name": "event-date-start",
@@ -113,7 +129,7 @@
                 {
                     "param": "post_type",
                     "operator": "==",
-                    "value": "events"
+                    "value": "event"
                 }
             ]
         ],
