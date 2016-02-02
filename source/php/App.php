@@ -20,11 +20,25 @@ class App
 
         add_action('init', array($this, 'registerPostType'));
         add_action('admin_menu', array($this, 'createParsePage'));
+        add_action('admin_notices', array($this, 'adminNotices'));
 
         // Register cron action
         add_action('import_events_daily', array($this, 'startImport'));
 
         new Admin\Options();
+    }
+
+    public function adminNotices()
+    {
+        global $current_screen;
+
+        if ($current_screen->id != 'edit-event') {
+            return;
+        }
+
+        if (isset($_GET['msg']) && $_GET['msg'] == 'import-complete') {
+            echo '<div class="updated"><p>Events imported</p></div>';
+        }
     }
 
     /**
@@ -85,6 +99,18 @@ class App
         if (!wp_next_scheduled('import_events_daily')) {
             wp_schedule_event(time(), 'daily', 'import_events_daily');
         }
+
+        add_action('manage_posts_extra_tablenav', function ($which) {
+            global $current_screen;
+
+            if ($current_screen->id != 'edit-event' || $which != 'top') {
+                return;
+            }
+
+            echo '<div class="alignleft actions">';
+                echo '<a href="' . admin_url('options.php?page=import-events') . '" class="button-primary" id="post-query-submit">Import now</a>';
+            echo '</div>';
+        });
     }
 
     /**
@@ -94,13 +120,14 @@ class App
     public function createParsePage()
     {
         add_submenu_page(
-            'edit.php?post_type=events',
-            'Uppdatera data',
-            'Uppdatera data',
+            null,
+            __('Import events', 'hbg-event-importer'),
+            __('Import events', 'hbg-event-importer'),
             'edit_posts',
-            'eventsGetNew',
+            'import-events',
             function () {
                 new \HbgEventImporter\Parser\Xcap('http://mittkulturkort.se/calendar/listEvents.action?month=&date=&categoryPermaLink=&q=&p=&feedType=ICAL_XML');
+                echo '<script>location.href = "' . admin_url('edit.php?post_type=event&msg=import-complete') . '";</script>';
             }
         );
     }
@@ -111,7 +138,11 @@ class App
      */
     public function startImport()
     {
-        new \HbgEventImporter\Parser\Xcap('http://mittkulturkort.se/calendar/listEvents.action?month=&date=&categoryPermaLink=&q=&p=&feedType=ICAL_XML');
+        if (get_field('xcap_daily_cron', 'option') === true || empty(get_field('xcap_daily_cron', 'option'))) {
+            $xcapUrl = 'http://mittkulturkort.se/calendar/listEvents.action' .
+                       '?month=&date=&categoryPermaLink=&q=&p=&feedType=ICAL_XML';
+            new \HbgEventImporter\Parser\Xcap($xcapUrl);
+        }
     }
 
     public function acfJsonLoadPath($paths)
