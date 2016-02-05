@@ -224,7 +224,8 @@ class Event
             'categories',
             'location',
             'address',
-            'image_url'
+            'image_url',
+            'ticket_link'
         );
 
         if (!$requiredKeysExists) {
@@ -282,5 +283,6 @@ class Event
         update_post_meta($postId, 'event-location', $data['location']);
         update_post_meta($postId, 'event-address', $data['address']);
         update_post_meta($postId, 'event-image_url', $data['image_url']);
+        update_post_meta($postId, 'event-ticket_url', $data['ticket_link']);
     }
 }

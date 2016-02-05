@@ -28,6 +28,7 @@ class Xcap extends \HbgEventImporter\Parser
             $location = isset($event->location) && !empty($event->location) ? $event->location : null;
             $address = isset($event->{'x-xcap-address'}) && !empty($event->{'x-xcap-address'}) ? $event->{'x-xcap-address'} : null;
             $image_url = isset($event->{'x-xcap-imageid'}) && !empty($event->{'x-xcap-imageid'}) ? $event->{'x-xcap-imageid'} : null;
+            $ticket_link = isset($event->{'x-xcap-ticketlink'}) && !empty($event->{'x-xcap-ticketlink'}) ? $event->{'x-xcap-ticketlink'} : null;
 
             if ($title === null || is_object($title)) {
                 continue;
@@ -47,7 +48,8 @@ class Xcap extends \HbgEventImporter\Parser
                 'categories'  => $categories,
                 'location'    => $location,
                 'address'     => $address,
-                'image_url'   => $image_url
+                'image_url'   => $image_url,
+                'ticket_link' => $ticket_link
             ));
         }
     }
