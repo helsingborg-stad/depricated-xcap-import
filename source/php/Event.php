@@ -125,7 +125,8 @@ class Event
             'cb'               => '<input type="checkbox">',
             'title'            => __('Event'),
             'event-start-date' => __('Start date'),
-            'event-end-date'   => __('End date')
+            'event-end-date'   => __('End date'),
+            'date'             => __('Date created')
         );
 
         return $columns;
