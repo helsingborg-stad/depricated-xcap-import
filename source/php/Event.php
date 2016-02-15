@@ -301,6 +301,7 @@ class Event
         }
 
         $uploadDir = wp_upload_dir();
+        $uploadDirUrl = $uploadDir['baseurl'];
         $uploadDir = $uploadDir['basedir'];
         $uploadDir = $uploadDir . '/events';
 
@@ -319,7 +320,7 @@ class Event
 
         $filetype = wp_check_filetype($filename, null);
         $attachmentId = wp_insert_attachment(array(
-            'guid' => $uploadDir['url'] . '/event/' . basename($filename),
+            'guid' => $uploadDirUrl . '/event/' . basename($filename),
             'post_mime_type' => $filetype['type'],
             'post_title' => $filename,
             'post_content' => '',
