@@ -39,7 +39,7 @@ class Event
             'hierarchical'         => false,
             'exclude_from_search'  => false,
             'taxonomies' => array('event-types'),
-            'supports'             => array('title', 'revisions', 'editor')
+            'supports'             => array('title', 'revisions', 'editor', 'thumbnail')
         );
 
         register_post_type('event', $args);
@@ -57,15 +57,22 @@ class Event
             }
 
             echo '<div class="alignleft actions">';
-                echo '<a href="' . admin_url('options.php?page=import-events') . '" class="button-primary" id="post-query-submit">Import now</a>';
+                echo '<a href="' . admin_url('options.php?page=import-events')
+                        . '" class="button-primary" id="post-query-submit">Import now</a>';
             echo '</div>';
         });
 
         // Setup table columns
-        add_filter('manage_edit-event_columns', '\HbgEventImporter\Event::defineListColumns'); // Columns
-        add_filter('manage_edit-event_sortable_columns', '\HbgEventImporter\Event::sortListColumns'); // Sorting
-        add_action('manage_event_posts_custom_column', '\HbgEventImporter\Event::listColumnContent', 10, 2); // Column content
+        // Columns
+        add_filter('manage_edit-event_columns', '\HbgEventImporter\Event::defineListColumns');
 
+        // Sorting
+        add_filter('manage_edit-event_sortable_columns', '\HbgEventImporter\Event::sortListColumns');
+
+        // Column content
+        add_action('manage_event_posts_custom_column', '\HbgEventImporter\Event::listColumnContent', 10, 2);
+
+        // Register taxonomy
         self::registerTaxonomy();
     }
 
@@ -266,6 +273,7 @@ class Event
         wp_set_object_terms($postId, $data['categories'], 'event-types', true);
 
         self::addPostMeta($postId, $data);
+        self::saveImageFromUrl($postId, $data['image_url']);
     }
 
     /**
@@ -284,5 +292,54 @@ class Event
         update_post_meta($postId, 'event-address', $data['address']);
         update_post_meta($postId, 'event-image_url', $data['image_url']);
         update_post_meta($postId, 'event-ticket_url', $data['ticket_link']);
+    }
+
+    private static function saveImageFromUrl($postId, $url)
+    {
+        if (!isset($url) || strlen($url) === 0 || !self::isUrl($url)) {
+            return false;
+        }
+
+        $uploadDir = wp_upload_dir();
+        $uploadDir = $uploadDir['basedir'];
+        $uploadDir = $uploadDir . '/events';
+
+        if (!is_dir($uploadDir)) {
+            if (!mkdir($uploadDir, 0776)) {
+                return new WP_Error('event', __('Could not create folder "' . $uploadDir . '", please go ahead and create it manually and rerun the import.'));
+            }
+        }
+
+        $filename = basename($url);
+        $contents = file_get_contents($url);
+
+        $save = fopen($uploadDir . '/' . $filename, 'w');
+        fwrite($save, $contents);
+        fclose($save);
+
+        $filetype = wp_check_filetype($filename, null);
+        $attachmentId = wp_insert_attachment(array(
+            'guid' => $uploadDir['url'] . '/event/' . basename($filename),
+            'post_mime_type' => $filetype['type'],
+            'post_title' => $filename,
+            'post_content' => '',
+            'post_status' => 'inherit',
+            'post_parent' => $postId
+        ), $uploadDir . '/' . $filename, $postId);
+
+        require_once(ABSPATH . 'wp-admin/includes/image.php');
+        $attachData = wp_generate_attachment_metadata($attachmentId, $uploadDir . '/' . $filename);
+        wp_update_attachment_metadata($attachmentId, $attachData);
+
+        set_post_thumbnail($postId, $attachmentId);
+    }
+
+    private static function isUrl($url)
+    {
+        if (preg_match('/^(?:[;\/?:@&=+$,]|(?:[^\W_]|[-_.!~*\()\[\] ])|(?:%[\da-fA-F]{2}))*$/', $url)) {
+            return true;
+        }
+
+        return false;
     }
 }
