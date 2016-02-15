@@ -300,6 +300,7 @@ class Event
             return false;
         }
 
+        // Upload paths
         $uploadDir = wp_upload_dir();
         $uploadDirUrl = $uploadDir['baseurl'];
         $uploadDir = $uploadDir['basedir'];
@@ -319,12 +320,16 @@ class Event
             return;
         }
 
+        // Save file to server
         $contents = file_get_contents($url);
         $save = fopen($uploadDir . '/' . $filename, 'w');
         fwrite($save, $contents);
         fclose($save);
 
+        // Detect filetype
         $filetype = wp_check_filetype($filename, null);
+
+        // Insert the file to media library
         $attachmentId = wp_insert_attachment(array(
             'guid' => $uploadDirUrl . '/event/' . basename($filename),
             'post_mime_type' => $filetype['type'],
@@ -334,6 +339,7 @@ class Event
             'post_parent' => $postId
         ), $uploadDir . '/' . $filename, $postId);
 
+        // Generate attachment meta
         require_once(ABSPATH . 'wp-admin/includes/image.php');
         $attachData = wp_generate_attachment_metadata($attachmentId, $uploadDir . '/' . $filename);
         wp_update_attachment_metadata($attachmentId, $attachData);
@@ -341,6 +347,11 @@ class Event
         set_post_thumbnail($postId, $attachmentId);
     }
 
+    /**
+     * Validates url
+     * @param  string  $url Url to validate
+     * @return boolean
+     */
     private static function isUrl($url)
     {
         if (preg_match('/^(?:[;\/?:@&=+$,]|(?:[^\W_]|[-_.!~*\()\[\] ])|(?:%[\da-fA-F]{2}))*$/', $url)) {
@@ -350,6 +361,11 @@ class Event
         return false;
     }
 
+    /**
+     * Checks if a attatchment src already exists in media library
+     * @param  string $src Media url
+     * @return mixed
+     */
     private static function attatchmentExists($src)
     {
         global $wpdb;
