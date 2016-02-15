@@ -312,8 +312,14 @@ class Event
         }
 
         $filename = basename($url);
-        $contents = file_get_contents($url);
 
+        // Bail if image already exists in library
+        if ($attatchmentId = self::attatchmentExists($uploadDirUrl . '/' . $filename)) {
+            set_post_thumbnail($postId, $attachmentId);
+            return;
+        }
+
+        $contents = file_get_contents($url);
         $save = fopen($uploadDir . '/' . $filename, 'w');
         fwrite($save, $contents);
         fclose($save);
@@ -339,6 +345,19 @@ class Event
     {
         if (preg_match('/^(?:[;\/?:@&=+$,]|(?:[^\W_]|[-_.!~*\()\[\] ])|(?:%[\da-fA-F]{2}))*$/', $url)) {
             return true;
+        }
+
+        return false;
+    }
+
+    private static function attatchmentExists($src)
+    {
+        global $wpdb;
+        $query = "SELECT ID FROM {$wpdb->posts} WHERE guid = '$src'";
+        $id = $wpdb->get_var($query);
+
+        if (!empty($id) && $id > 0) {
+            return $id;
         }
 
         return false;
