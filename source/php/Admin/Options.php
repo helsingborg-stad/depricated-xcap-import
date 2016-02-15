@@ -11,7 +11,7 @@ class Options
                 'page_title'    => 'Hbg Event Importer Options',
                 'menu_title'    => __('Options'),
                 'parent_slug'   => 'edit.php?post_type=event',
-                'capability'    => 'switch_themes'
+                'capability'    => 'manage_options'
             ));
         }
     }
