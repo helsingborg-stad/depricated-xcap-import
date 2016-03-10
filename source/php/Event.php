@@ -291,7 +291,12 @@ class Event
         update_post_meta($postId, 'event-location', $data['location']);
         update_post_meta($postId, 'event-address', $data['address']);
         update_post_meta($postId, 'event-image_url', $data['image_url']);
-        update_post_meta($postId, 'event-ticket_url', $data['ticket_link']);
+
+        $ticketLink = $data['ticket_link'];
+        if (!preg_match("/\b(?:(?:https?|ftp):\/\/|www\.)[-a-z0-9+&@#\/%?=~_|!:,.;]*[-a-z0-9+&@#\/%=~_|]/i", $ticketLink)) {
+            $ticketLink = '';
+        }
+        update_post_meta($postId, 'event-ticket_url', $ticketLink);
     }
 
     private static function saveImageFromUrl($postId, $url)
