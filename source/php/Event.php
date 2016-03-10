@@ -292,10 +292,10 @@ class Event
         update_post_meta($postId, 'event-address', $data['address']);
         update_post_meta($postId, 'event-image_url', $data['image_url']);
 
-        $ticketLink = $data['ticket_link'];
-        if (!preg_match("/\b(?:(?:https?|ftp):\/\/|www\.)[-a-z0-9+&@#\/%?=~_|!:,.;]*[-a-z0-9+&@#\/%=~_|]/i", $ticketLink)) {
-            $ticketLink = '';
+        if (!self::isUrl($data['ticket_link'])) {
+            $data['ticket_link'] = '';
         }
+
         update_post_meta($postId, 'event-ticket_url', $ticketLink);
     }
 
