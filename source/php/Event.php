@@ -286,8 +286,8 @@ class Event
     {
         update_post_meta($postId, 'event-sync', true);
         update_post_meta($postId, 'event-uid', $data['id']);
-        update_post_meta($postId, 'event-date-start', $data['date_start']);
-        update_post_meta($postId, 'event-date-end', $data['date_end']);
+        update_post_meta($postId, 'event-date-start', date('Y-m-d H:i', strtotime($data['date_start'])));
+        update_post_meta($postId, 'event-date-end', date('Y-m-d H:i', strtotime($data['date_end'])));
         update_post_meta($postId, 'event-location', $data['location']);
         update_post_meta($postId, 'event-address', $data['address']);
         update_post_meta($postId, 'event-image_url', $data['image_url']);

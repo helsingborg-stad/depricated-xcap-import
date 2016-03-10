@@ -6,9 +6,17 @@ class App
 {
     public function __construct()
     {
-        if (!file_exists(WP_CONTENT_DIR . '/mu-plugins/AcfImportCleaner.php')) {
-            require_once HBGEVENTIMPORTER_PATH . 'source/php/Helper/AcfImportCleaner.php';
-        }
+        add_action('plugins_loaded', function () {
+            if (!class_exists('acf_field_date_time_picker_plugin')) {
+                require_once(HBGEVENTIMPORTER_PATH . 'source/php/Vendor/acf-field-date-time-picker/acf-date_time_picker.php');
+            }
+        });
+
+        add_action('init', function () {
+            if (!file_exists(WP_CONTENT_DIR . '/mu-plugins/AcfImportCleaner.php') && !class_exists('\\AcfImportCleaner\\AcfImportCleaner')) {
+                require_once HBGEVENTIMPORTER_PATH . 'source/php/Helper/AcfImportCleaner.php';
+            }
+        });
 
         register_activation_hook(plugin_basename(__FILE__), '\HbgEventImporter\App::addCronJob');
         register_deactivation_hook(plugin_basename(__FILE__), '\HbgEventImporter\App::removeCronJob');
