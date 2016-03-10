@@ -296,7 +296,7 @@ class Event
             $data['ticket_link'] = '';
         }
 
-        update_post_meta($postId, 'event-ticket_url', $ticketLink);
+        update_post_meta($postId, 'event-ticket_url', $data['ticket_link']);
     }
 
     private static function saveImageFromUrl($postId, $url)
@@ -320,7 +320,7 @@ class Event
         $filename = basename($url);
 
         // Bail if image already exists in library
-        if ($attatchmentId = self::attatchmentExists($uploadDirUrl . '/' . $filename)) {
+        if ($attachmentId = self::attatchmentExists($uploadDir . '/' . basename($filename))) {
             set_post_thumbnail($postId, $attachmentId);
             return;
         }
@@ -336,7 +336,7 @@ class Event
 
         // Insert the file to media library
         $attachmentId = wp_insert_attachment(array(
-            'guid' => $uploadDirUrl . '/event/' . basename($filename),
+            'guid' => $uploadDir . '/' . basename($filename),
             'post_mime_type' => $filetype['type'],
             'post_title' => $filename,
             'post_content' => '',
@@ -359,7 +359,7 @@ class Event
      */
     private static function isUrl($url)
     {
-        if (preg_match('/^(?:[;\/?:@&=+$,]|(?:[^\W_]|[-_.!~*\()\[\] ])|(?:%[\da-fA-F]{2}))*$/', $url)) {
+        if (is_string($url) && preg_match('/^(?:[;\/?:@&=+$,]|(?:[^\W_]|[-_.!~*\()\[\] ])|(?:%[\da-fA-F]{2}))*$/', $url)) {
             return true;
         }
 
