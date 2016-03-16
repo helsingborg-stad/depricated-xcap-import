@@ -63,7 +63,7 @@ class Xcap extends \HbgEventImporter\Parser
     {
         $passes = true;
 
-        if (get_field('filter_categories', 'options')) {
+        if (get_field('xcap_filter_categories', 'options')) {
             $filters = array_map('trim', explode(',', get_field('xcap_filter_categories', 'options')));
             $categoriesLower = array_map('strtolower', $categories);
             $passes = false;
