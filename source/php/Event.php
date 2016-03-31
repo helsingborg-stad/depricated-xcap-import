@@ -251,7 +251,7 @@ class Event
 
         // Update or create event
         if ($postId !== null) {
-            if (get_field('event-sync', $postId) !== true) {
+            if (get_field('event-sync', $postId) !== true && get_field('event-sync', $postId) != '1') {
                 return;
             }
 
