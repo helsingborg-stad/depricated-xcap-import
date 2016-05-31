@@ -30,7 +30,7 @@ class Xcap extends \HbgEventImporter\Parser
             $image_url = isset($event->{'x-xcap-imageid'}) && !empty($event->{'x-xcap-imageid'}) ? $event->{'x-xcap-imageid'} : null;
             $ticket_link = isset($event->{'x-xcap-externalticketlink'}) && !empty($event->{'x-xcap-externalticketlink'}) ? $event->{'x-xcap-externalticketlink'} : null;
 
-            if (empty($ticket_link)) {
+            if (empty($ticket_link) || $ticket_link === "null") {
                 $ticket_link = isset($event->{'x-xcap-ticketlink'}) && !empty($event->{'x-xcap-ticketlink'}) ? $event->{'x-xcap-ticketlink'} : null;
             }
 
