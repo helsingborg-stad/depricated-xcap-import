@@ -50,6 +50,11 @@ class Xcap extends \HbgEventImporter\Parser
                 continue;
             }
 
+            //Add http to strings not containing protocol. The server may correct this to https by redirect.
+            if (strpos($image_url, '//') === 0) {
+                $image_url = 'http:'.$image_url;
+            }
+
             \HbgEventImporter\Event::add(array(
                 'id'          => $event->uid,
                 'date_start'  => $this->formatDate($date_start),
