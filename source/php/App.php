@@ -89,7 +89,7 @@ class App
             'edit_posts',
             'import-events',
             function () {
-                new \HbgEventImporter\Parser\Xcap('http://mittkulturkort.se/calendar/listEvents.action?month=&date=&categoryPermaLink=&q=&p=&feedType=ICAL_XML');
+                new \HbgEventImporter\Parser\Xcap('http://kulturkortet.se/calendar/listEvents.action?month=&date=&categoryPermaLink=&q=&p=&feedType=ICAL_XML');
                 echo '<script>location.href = "' . admin_url('edit.php?post_type=event&msg=import-complete') . '";</script>';
             }
         );
@@ -102,7 +102,7 @@ class App
     public function startImport()
     {
         if (get_field('xcap_daily_cron', 'option') === true || empty(get_field('xcap_daily_cron', 'option'))) {
-            $xcapUrl = 'http://mittkulturkort.se/calendar/listEvents.action' .
+            $xcapUrl = 'http://kulturkortet.se/calendar/listEvents.action' .
                        '?month=&date=&categoryPermaLink=&q=&p=&feedType=ICAL_XML';
             new \HbgEventImporter\Parser\Xcap($xcapUrl);
         }
